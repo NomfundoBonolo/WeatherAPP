@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nomfundo WeatherApp</title>
+    <style>
+      .app-section {
+        background: linear-gradient(to top, #c077c9 0%, #e4bcdd 100%);
+        border: 1px solid rgb(21, 21, 21);
+        border-radius: 20px;
+        padding: 20px 40px;
+        margin: 50px auto;
+        margin-bottom: 30px;
+        height: 700px;
+        max-width: 800px;
+        box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .heading-section {
+        margin-bottom: 10px;
+      }
+
+      h1 {
+        text-align: center;
+        font-family: "Fira Sans", sans-serif;
+        color: rgb(163, 35, 97);
+      }
+
+      form {
+        display: inline;
+        width: 100px;
+      }
+      #userinput-section {
+        margin: 20px;
+      }
+
+      #city-name {
+        font-size: 18px;
+        display: inline;
+      }
+
+      .search-button,
+      #search-input {
+        padding: 1px 24px;
+        font-size: 22px;
+        border-radius: 20px;
+        border: none;
+        display: inline;
+        margin: 10px auto;
+      }
+
+      .present-stats,
+      .otherstats {
+        margin: 40px 15px;
+        border: none;
+        border-radius: 20px;
+        background: linear-gradient(
+          180.3deg,
+          rgb(221, 221, 221) 5.5%,
+          rgb(99, 113, 125) 90.2%
+        );
+        text-align: center;
+
+        /* background: linear-gradient(120deg,#fff 10%, #ebedee 100%); */
+      }
+      .otherstats {
+        text-align: center;
+        font-size: 20px;
+        color: rgb(79, 77, 77);
+        background: none;
+      }
+
+      #current-temp-button {
+        font-size: 14px;
+        font-weight: bold;
+        padding: 2px 20px;
+        margin: auto;
+        border-radius: 20px;
+      }
+
+      .temperature {
+        font-size: 55px;
+        text-align: center;
+      }
+      .city-timetemp-info {
+        position: relative;
+        top: 20px;
+        margin: 10px auto;
+      }
+      .city-timetemp-info h3 {
+        font-family: "Gelasio", serif;
+        font-size: 35px;
+      }
+
+      .city-timetemp-info p {
+        /* font-family: "Satisfy", cursive; */
+        font-size: 20px;
+        margin-top: 3px;
+      }
+
+      .tempdescription {
+        font-size: 25px;
+        font-style: italic;
+      }
+
+      .week-info {
+        gap: 10px;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0px;
+      }
+
+      footer {
+        text-align: center;
+        margin: 3px auto;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      footer a {
+        text-decoration: none;
+        color: rgb(13, 13, 13);
+      }
+
+      a:hover {
+        font-weight: bold;
+      }
+
+      .weather-forecast {
+        margin-top: 50px;
+        text-align: center;
+        color: #000;
+      }
+
+      .weather-forecast-date {
+        font-family: "Satisfy", cursive;
+        font-size: 25px;
+        opacity: 0.7;
+      }
+
+      .weather-forecast-temperature-min {
+        opacity: 0.5;
+      }
+
+      .weather-forecast-temperatures {
+        font-size: 16px;
+      }
+
+      .img {
+        width: 70px;
+      }
+    </style>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@1,800&family=Gelasio:ital,wght@1,600&family=Satisfy&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="src/styles.css" />
+
+    <script>
+      function addCurrentDay(ms) {
+        // event.preventDefault();
+        let todayDate = new Date(ms);
+
+        let days = [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ];
+
+        // let months = [
+        //   "January",
+        //   "February",
+        //   "March",
+        //   "April",
+        //   "May",
+        //   "June",
+        //   "July",
+        //   "August",
+        //   "September",
+        //   "october",
+        //   "November",
+        //   "December"
+        // ];
+
+        let day = days[todayDate.getDay()];
+
+        // let month = months[todayDate.getMonth()];
+        // let date = todayDate.getDate();
+        let hours = todayDate.getHours();
+        if (hours < 10) {
+          hours = `0${hours}`;
+        }
+        let minutes = todayDate.getMinutes();
+        if (minutes < 10) {
+          minutes = `0${minutes}`;
+        }
+
+        let p = document.querySelector(".current-day");
+        p.innerHTML = `Last updated: ${day} ${hours}:${minutes}`;
+        return `Last updated: ${day} ${hours}:${minutes}`;
+        // h4.innerHTML = `${day}, ${month} ${date}`;
+      }
+
+      function formatDay(timestamp) {
+        let date = new Date(timestamp * 1000);
+        let day = date.getDay();
+        let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+        return days[day];
+      }
+
+      function displayForecast(response) {
+        let forecastElement = document.querySelector("#forecast");
+
+        let forecast = response.data.daily;
+
+        let forecastHTML = `<div class="row">`;
+        forecast.forEach(function (forecastDay, index) {
+          if (index < 6) {
+            forecastHTML =
+              forecastHTML +
+              `
+        <div class="col-2 dailystats">
+          <div class="weather-forecast-date">${formatDay(forecastDay.dt)}</div>
+          <img class="img" 
+            src="http://openweathermap.org/img/wn/${
+              forecastDay.weather[0].icon
+            }@2x.png"
+            alt=""
+            width="42"
+          />
+          <div class="weather-forecast-temperatures">
+            <span class="weather-forecast-temperature-max forecast-temp">${Math.round(
+              forecastDay.temp.max
+            )}</span><span>°</span> 
+            <span class="weather-forecast-temperature-min forecast-temp">${Math.round(
+              forecastDay.temp.min
+            )}</span><span>°</span> 
+          </div>
+        </div>
+    `;
+          }
+        });
+
+        forecastHTML = forecastHTML + `</div>`;
+        forecastElement.innerHTML = forecastHTML;
+        // console.log(forecastHTML);
+      }
+
+      function getForecast(coordinates) {
+        // console.log(coordinates);
+        let apikey = "203fa770242fcd2b9555d832a88ea567";
+        let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apikey}&units=metric`;
+        axios.get(apiUrl).then(displayForecast);
+      }
+
+      function updateCitynametemp(event) {
+        event.preventDefault();
+        let userCityInput = document.querySelector("#city-name");
+        if (userCityInput.value) {
+          let h3 = document.querySelector("h3");
+          let cityName = userCityInput.value.toUpperCase();
+          h3.innerHTML = `${cityName}`;
+
+          let apiKey = "203fa770242fcd2b9555d832a88ea567";
+          function showTemp(response) {
+            // console.log(response.data);
+            let temperature = Math.round(response.data.main.temp);
+            // console.log(temperature);
+            let valueOfTemp = document.querySelector("#temp-value");
+            valueOfTemp.innerHTML = temperature;
+
+            let iconId = response.data.weather[0].icon;
+            let iconDesc = response.data.weather[0].description;
+
+            let icon = document.querySelector("#icon");
+            icon.setAttribute(
+              "src",
+              `https://openweathermap.org/img/wn/${iconId}@2x.png`
+            );
+            icon.setAttribute("alt", `${iconDesc}`);
+
+            let tempDescription = document.querySelector(
+              ".present-stats .city-timetemp-info .tempdescription"
+            );
+            tempDescription.innerHTML = response.data.weather[0].description;
+
+            let humid = document.querySelector(".Humidity");
+            humid.innerHTML = response.data.main.humidity;
+
+            let wind = document.querySelector(".Wind");
+            wind.innerHTML = Math.round(response.data.wind.speed);
+
+            let dateElement = document.querySelector(".current-day");
+            // console.log(response.data.dt);
+            let time = response.data.dt * 1000;
+            dateElement.innerHTML = addCurrentDay(time);
+
+            getForecast(response.data.coord);
+          }
+          let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${userCityInput.value}&units=metric`;
+          axios.get(`${apiUrl}&appid=${apiKey}`).then(showTemp);
+        } else {
+          prompt("please enter a valid city name");
+        }
+      }
+
+      function changeTempToF() {
+        // event.preventDefault();
+        let tempVariable = document.querySelector(".temp-type");
+        if (tempVariable.innerHTML !== "F") {
+          let valueOfTemp = document.querySelector("#temp-value");
+          let tempinF = valueOfTemp.innerHTML;
+          tempinF = Number(tempinF);
+          valueOfTemp.innerHTML = Math.round((tempinF * 9) / 5 + 32);
+          let updateTempType = document.querySelector(".temp-type");
+          updateTempType.innerHTML = "F";
+        }
+
+        let forecastTemp = document.querySelectorAll(".forecast-temp");
+        // console.log(forecastTemp);
+        // console.log(forecastTemp[0].innerHTML);
+        // console.log(forecastTemp[1].innerHTML);
+        // console.log(forecastTemp[2].innerHTML);
+        // console.log(forecastTemp[3].innerHTML);
+        // console.log(forecastTemp[4].innerHTML);
+        // console.log(forecastTemp[5].innerHTML);
+        // console.log(forecastTemp[6].innerHTML);
+        // console.log(forecastTemp[7].innerHTML);
+        // console.log(forecastTemp[8].innerHTML);
+        // console.log(forecastTemp[9].innerHTML);
+        // console.log(forecastTemp[10].innerHTML);
+        // console.log(forecastTemp[11].innerHTML);
+
+        forecastTemp.forEach((temp) => {
+          let x = temp.innerHTML;
+          x = Math.round((x * 9) / 5 + 32);
+          // console.log(x);
+          temp.innerHTML = `${x}`;
+        });
+      }
+      function changeTempToC() {
+        // event.preventDefault();
+        let tempVariable = document.querySelector(".temp-type");
+        // console.log(tempVariable);
+        if (tempVariable.innerHTML !== "C") {
+          let valueOfTemp = document.querySelector("#temp-value");
+          let tempinC = valueOfTemp.innerHTML;
+          tempinC = Number(tempinC);
+          valueOfTemp.innerHTML = Math.round(((tempinC - 32) * 5) / 9);
+
+          let updateTempType = document.querySelector(".temp-type");
+          // console.log(typeof updateTempType);
+          updateTempType.innerHTML = "C";
+        }
+      }
+
+      let form = document.querySelector("form");
+      form.addEventListener("submit", updateCitynametemp);
+
+      let tempCelsius = document.querySelector("#temp-c");
+      tempCelsius.addEventListener("click", changeTempToC);
+
+      let tempFar = document.querySelector("#temp-f");
+      tempFar.addEventListener("click", changeTempToF);
+
+      function showPresentTemp() {
+        function updateTemp(response) {
+          // console.log(response.data);
+          let newTemp = document.querySelector("#temp-value");
+          let currentTemp = Math.round(response.data.main.temp);
+          // console.log(currentTemp);
+          newTemp.innerHTML = `${currentTemp}`;
+
+          let newCity = document.querySelector("h3");
+          newCity.innerHTML = response.data.name.toUpperCase();
+
+          let tempDescription = document.querySelector(
+            ".present-stats .city-timetemp-info .tempdescription"
+          );
+          tempDescription.innerHTML = response.data.weather[0].description;
+
+          let iconId = response.data.weather[0].icon;
+          let iconDesc = response.data.weather[0].description;
+
+          let icon = document.querySelector("#icon");
+          icon.setAttribute(
+            "src",
+            `https://openweathermap.org/img/wn/${iconId}@2x.png`
+          );
+          icon.setAttribute("alt", `${iconDesc}`);
+
+          let wind = document.querySelector(".Wind");
+          wind.innerHTML = Math.round(response.data.wind.speed);
+
+          let humid = document.querySelector(".Humidity");
+          humid.innerHTML = response.data.main.humidity;
+
+          let dateElement = document.querySelector(".current-day");
+          let time = response.data.dt * 1000;
+          // debugger;
+          dateElement.innerHTML = addCurrentDay(time);
+        }
+
+        function showPos(position) {
+          // console.log(position);
+          let lat = position.coords.latitude;
+          let lon = position.coords.longitude;
+          // console.log(lat);
+          // console.log(lon);
+          let apiKey = "203fa770242fcd2b9555d832a88ea567";
+
+          let apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+          axios.get(apiUrl).then(updateTemp);
+
+          let apiUrl2 = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+          axios.get(apiUrl2).then(displayForecast);
+        }
+        navigator.geolocation.getCurrentPosition(showPos);
+      }
+
+      let button = document.querySelector("#current-temp-button");
+      button.addEventListener("click", showPresentTemp);
+
+      src = "https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js";
+      integrity =
+        "sha512-u9akINsQsAkG9xjc1cnGF4zw5TFDwkxuc9vUp5dltDWYCSmyd0meygbvgXrlc/z7/o4a19Fb5V0OUE58J7dcyw==";
+      crossorigin = "anonymous";
+      referrerpolicy = "no-referrer";
+    </script>
+  </head>
+  <body>
+    <div class="container app-section">
+      <div class="row heading-section">
+        <div class="col-8"><h1>WeatherApp</h1></div>
+        <div class="col-2">
+          <div class="dropdown">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              ºC|ºF
+            </button>
+            <ul class="dropdown-menu">
+              <li id="temp-c"><a class="dropdown-item" href="#">ºC</a></li>
+              <li id="temp-f"><a class="dropdown-item" href="#">ºF</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-2">
+          <button
+            type="button"
+            class="btn btn-outline-success"
+            id="current-temp-button"
+          >
+            Current Temp
+          </button>
+        </div>
+      </div>
+
+      <form>
+        <input
+          type="search"
+          placeholder="Enter a city name"
+          class="form-control"
+          autocomplete="off"
+          autofocus="on"
+          id="city-name"
+        />
+        <input type="submit" value="Search" id="search-input" />
+      </form>
+
+      <div class="row present-stats">
+        <div class="col temperature">
+          <p>
+            <span id="temp-value">18</span>º<span class="temp-type">C</span>
+            <br />
+            <img
+              src="http://openweathermap.org/img/wn/10d@2x.png"
+              alt="weathericon"
+              id="icon"
+            />
+          </p>
+        </div>
+        <div class="col city-timetemp-info">
+          <h3>Midrand</h3>
+
+          <span class="tempdescription">Raining</span>
+          <br />
+          <p class="current-day">Mon , 12 March 2023</p>
+        </div>
+        <div class="col otherstats">
+          <ul>
+            <li>Humidity: <span class="Humidity">100</span></li>
+            <li>Wind: <span class="Wind">10</span>km/h</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="weather-forecast" id="forecast"></div>
+    </div>
+    <footer>
+      Coded by
+      <a href="https://www.shecodes.io/NomfundoDakile"> Nomfundo Dakile </a>
+      <br />
+
+      open-sourced at
+      <em>
+        <a
+          href="https://github.com/NomfundoBonolo/WeatherApp.git"
+          target="_blank"
+          >github
+        </a>
+      </em>
+    </footer>
+    <script src="src/index.js"></script>
+  </body>
+</html>
